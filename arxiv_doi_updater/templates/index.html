@@ -3,9 +3,13 @@
   <head>
     <meta charset="utf-8" />
     <title>arXiv DOI updater</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}" type="text/css" />
   </head>
   <body>
-    <form method="POST" accept-charset="utf-8">
+    <h1>arXiv DOI updater</h1>
+    <p>Paste a BibTeX file with arXiv references to obtain a list of links to the published versions.</p>
+    <p>(Only the <a href=https://arxiv.org/hypertex/bibstyles/>post-2007 format prescribed by arXiv</a> is supported so far.)</p>
+    <form id="bibform" method="POST" accept-charset="utf-8">
       {{ form.bibtext.label }} {{ form.bibtext() }}
       <input type="submit" value="Submit">
     </form>
