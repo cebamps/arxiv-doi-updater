@@ -8,7 +8,7 @@
   <body>
     <h1>arXiv DOI updater</h1>
     <p>Paste a BibTeX file with arXiv references to obtain a list of links to the published versions.</p>
-    <p>(Only the <a href=https://arxiv.org/hypertex/bibstyles/>post-2007 format prescribed by arXiv</a> is supported so far.)</p>
+    <p>(Supports output from Mendeley, Zotero, the <a href=https://arxiv.org/hypertex/bibstyles/>eprint format prescribed by arXiv</a>, and anything which sets the url field to an arXiv URL.)</p>
     <form id="bibform" method="POST" accept-charset="utf-8">
       {{ form.bibtext.label }} {{ form.bibtext() }}
       <input type="submit" value="Submit">
