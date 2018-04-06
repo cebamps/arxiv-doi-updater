@@ -13,11 +13,11 @@ def parse_bib(bibtext):
     return parser.parse(bibtext)
 
 
-def extract_arxiv_entries(bibtext):
+def get_arxiv_ids(bibtext):
     '''Get BibTeX data of arXiv entries in a BibTeX string
 
-    Returns a dict mapping each cite key to a dict of bibliography data for the
-    entry.
+    Returns a dict mapping each cite key for arXiv publications to the arXiv id
+    encoded in the entry.
     '''
     entries = parse_bib(bibtext).entries_dict
     ids = {key: entries[key]['eprint']
@@ -44,7 +44,7 @@ def find_published_entries(bibtext, agent=None):
 
     Entries without URL data are not returned.
     '''
-    bib_entries = extract_arxiv_entries(bibtext)
+    bib_entries = get_arxiv_ids(bibtext)
     arxiv_entries = get_publication_data(list(bib_entries.values()),
                                          agent=agent)
 
