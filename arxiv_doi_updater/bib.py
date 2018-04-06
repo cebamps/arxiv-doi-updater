@@ -1,6 +1,8 @@
 from .arxiv import get_publication_data
 from bibtexparser.bparser import BibTexParser
 
+import re
+
 
 def parse_bib(bibtext):
     '''Parse a string containing BibTeX data using bibtexparser
@@ -20,10 +22,35 @@ def get_arxiv_ids(bibtext):
     encoded in the entry.
     '''
     entries = parse_bib(bibtext).entries_dict
-    ids = {key: entries[key]['eprint']
-           for key, entry in entries.items()
-           if 'eprint' in entry}
-    return ids
+    ids = {key: extract_arxiv_id(entry) for key, entry in entries.items()}
+    return {k:v for k, v in ids.items() if v is not None}
+
+
+def extract_arxiv_id(entry):
+    '''Extract an API-compatible arXiv ID from a BibTeX entry'''
+
+    # The entry field names are lowercased by bibtexparser.
+    if 'arxivid' in entry:
+        # Mendeley
+        return re.match(r'^(?:arXiv:)?(.+?)(?:v[0-9]+)?$', entry['arxivid']).group(1)
+
+    if entry.get('archiveprefix', '').lower() == 'arxiv' and 'eprint' in entry:
+        # arXiv-recommended eprint syntax
+        # Mendeley matches but does not follow the spec. Fortunately we already
+        # dealt with it above.
+        return entry['eprint']
+
+    url_match = re.match(r'^https?://arxiv.org/abs/(.+?)(?:v[0-9]+)?$', entry.get('url', ''))
+    if url_match:
+        # Zotero, Mendeley
+        return url_match.group(1)
+
+    note_match = re.match(r'\barXiv: (.+?)(?:v[0-9]+)?\b', entry.get('note', ''))
+    if note_match:
+        # Zotero, should match above
+        return note_match.group(1)
+
+    return
 
 
 def arxiv_pub_link(entry):
