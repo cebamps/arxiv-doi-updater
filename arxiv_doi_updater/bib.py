@@ -45,10 +45,10 @@ def extract_arxiv_id(entry):
         # Zotero, Mendeley
         return url_match.group(1)
 
-    note_match = re.match(r'\barXiv: (.+?)(?:v[0-9]+)?\b', entry.get('note', ''))
-    if note_match:
-        # Zotero, should match above
-        return note_match.group(1)
+    #note_match = re.match(r'\barXiv: (.+?)(?:v[0-9]+)?(?=[^\w/.-]|$)', entry.get('note', ''))
+    #if note_match:
+    #    # Zotero, should match above
+    #    return note_match.group(1)
 
     return
 
