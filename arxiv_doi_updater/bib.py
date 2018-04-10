@@ -29,6 +29,11 @@ def get_arxiv_ids(bibtext):
 def extract_arxiv_id(entry):
     '''Extract an API-compatible arXiv ID from a BibTeX entry'''
 
+    if ('doi' in entry or
+            'journal' in entry and 'arxiv' not in entry['journal'].lower()):
+        # There is some publication information, so the entry must be up to date.
+        return None
+
     # The entry field names are lowercased by bibtexparser.
     if 'arxivid' in entry:
         # Mendeley
